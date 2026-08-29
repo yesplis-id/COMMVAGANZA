@@ -232,7 +232,7 @@ body{min-height:100vh}
           <button type="button" class="qty-btn" id="minusBtn" aria-label="Kurangi tiket" disabled>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/></svg>
           </button>
-          <div class="qty-number" id="jumlahTiket" aria-live="polite">0</div>
+          <div class="qty-number" id="jumlahTiket" aria-live="polite" aria-atomic="true">0</div>
           <button type="button" class="qty-btn" id="plusBtn" aria-label="Tambah tiket">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
           </button>
@@ -263,6 +263,11 @@ const BATAS_KIRIM=4000;
 
 let jumlahTiket=0;
 let mengirim=false;
+try {
+  const savedQty=Number(localStorage.getItem('jumlahTiket'));
+  const savedCategory=localStorage.getItem('kategoriTiket');
+  if(Number.isInteger(savedQty) && savedQty>=0 && savedQty<=MAKSIMAL_TIKET && savedCategory===KATEGORI_TIKET) jumlahTiket=savedQty;
+} catch(e) { console.warn('localStorage:',e); }
 
 const jumlahElement=document.getElementById('jumlahTiket');
 const checkoutButton=document.getElementById('checkoutButton');
@@ -325,33 +330,13 @@ minusBtn.addEventListener('click',()=>{
   }
 });
 
-function kirimNotifikasiPesanan(){
-  const payload={
-    _subject:'Pesanan Baru - COMMVAGANZA 10.0',
-    halaman:'Pilih Tiket',
-    kategoriTiket:KATEGORI_TIKET,
-    jumlahTiket:String(jumlahTiket),
-    hargaSatuan:formatRupiah(HARGA_SATUAN),
-    totalPembayaran:formatRupiah(HARGA_SATUAN*jumlahTiket),
-    waktuPesanan:new Date().toLocaleString('id-ID')
-  };
-  return fetch(FORMSPREE_ENDPOINT,{
-    method:'POST',
-    headers:{'Content-Type':'application/json','Accept':'application/json'},
-    body:JSON.stringify(payload)
-  }).catch(()=>{});
-}
-
 checkoutButton.addEventListener('click',()=>{
-  if(jumlahTiket<1||mengirim)return;
+  if(jumlahTiket<1 || jumlahTiket>MAKSIMAL_TIKET || mengirim) return;
   mengirim=true;
   checkoutButton.disabled=true;
-  if(btnLabel)btnLabel.textContent='Memproses...';
+  if(btnLabel) btnLabel.textContent='Memproses...';
   simpanPesanan();
-  const batas=new Promise(resolve=>setTimeout(resolve,BATAS_KIRIM));
-  Promise.race([kirimNotifikasiPesanan(),batas]).then(()=>{
-    window.location.assign(HALAMAN_TUJUAN);
-  });
+  window.location.assign(HALAMAN_TUJUAN);
 });
 
 if(backBtn){
