@@ -17,8 +17,6 @@
 <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/eticketonline2026/Commvaganza/main/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://formspree.io" crossorigin>
-<link rel="dns-prefetch" href="https://formspree.io">
 <link rel="prefetch" href="eticket.html">
 <link rel="preload" as="image" href="qris.png" fetchpriority="high">
 <link rel="preload" as="image" href="https://raw.githubusercontent.com/eticketonline2026/Commvaganza/main/banner.png" fetchpriority="high">
@@ -224,47 +222,117 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid rgba(
 .submit-btn:disabled{opacity:.48;cursor:not-allowed;box-shadow:none}
 .submit-btn:disabled::before{display:none}
 
-.btn-redirect{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;border-radius:12px;background:linear-gradient(135deg,var(--orange),var(--orange-deep));color:#fff;font-weight:800;font-size:13px;text-decoration:none;box-shadow:0 8px 20px rgba(249,115,22,.22);transition:.25s;font-family:'Plus Jakarta Sans',sans-serif;touch-action:manipulation}
-.btn-redirect:hover{transform:translateY(-1px);box-shadow:0 11px 25px rgba(249,115,22,.3)}
+.btn-redirect{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;border-radius:12px;background:linear-gradient(135deg,#25D366,#16A34A);color:#fff;font-weight:800;font-size:13px;text-decoration:none;box-shadow:0 8px 20px rgba(22,163,74,.25);transition:.25s;font-family:'Plus Jakarta Sans',sans-serif;touch-action:manipulation}
+.btn-redirect:hover{transform:translateY(-1px);box-shadow:0 11px 25px rgba(22,163,74,.35)}
 .btn-redirect svg{width:15px;height:15px;flex:none}
+.btn-ghost{display:flex;align-items:center;justify-content:center;width:100%;padding:13px;border-radius:12px;background:#fff;border:1px solid var(--orange-pale);color:var(--orange-deep);font-weight:800;font-size:13px;text-decoration:none;transition:.25s;font-family:'Plus Jakarta Sans',sans-serif}
+.btn-ghost:hover{background:var(--orange-light)}
 
 .site-footer{text-align:center;padding:2px 16px 0}
 .footer-copy{font-size:11px;font-weight:500;color:var(--text);opacity:.45}
 
+/* ============ LOADING PREMIUM FULLSCREEN ============ */
 .loading-overlay{
-  visibility:hidden;opacity:0;position:fixed;inset:0;background:rgba(92,29,10,.42);
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);z-index:99999;
-  display:flex;justify-content:center;align-items:center;padding:18px;transition:.35s
+  visibility:hidden;opacity:0;position:fixed;inset:0;z-index:99999;
+  display:flex;align-items:center;justify-content:center;padding:18px;
+  background:
+    radial-gradient(900px 500px at 50% -10%,rgba(253,186,116,.16),transparent 55%),
+    radial-gradient(600px 400px at 12% 110%,rgba(236,72,153,.10),transparent 55%),
+    linear-gradient(160deg,#2A0E03 0%,#4A1A08 45%,#2A0E03 100%);
+  transition:opacity .45s ease,visibility .45s ease;
+  overflow:hidden
 }
 .loading-overlay.active{visibility:visible;opacity:1}
-.loading-content{
-  max-width:420px;width:100%;background:var(--ivory);padding:28px 21px;border-radius:25px;
-  box-shadow:0 25px 70px rgba(92,29,10,.25);border:1px solid var(--orange-pale);text-align:center
+.aurora{position:absolute;border-radius:50%;filter:blur(70px);pointer-events:none;opacity:.55}
+.aurora.a1{width:320px;height:320px;top:-90px;left:-70px;background:radial-gradient(circle,rgba(249,115,22,.5),transparent 65%);animation:drift1 11s ease-in-out infinite alternate}
+.aurora.a2{width:280px;height:280px;bottom:-80px;right:-60px;background:radial-gradient(circle,rgba(251,191,36,.4),transparent 65%);animation:drift2 13s ease-in-out infinite alternate}
+.aurora.a3{width:200px;height:200px;top:38%;right:-90px;background:radial-gradient(circle,rgba(236,72,153,.28),transparent 65%);animation:drift1 15s ease-in-out infinite alternate-reverse}
+@keyframes drift1{from{transform:translate(0,0) scale(1)}to{transform:translate(40px,30px) scale(1.15)}}
+@keyframes drift2{from{transform:translate(0,0) scale(1.1)}to{transform:translate(-35px,-25px) scale(.95)}}
+
+.loading-card{
+  position:relative;z-index:2;width:100%;max-width:420px;
+  background:rgba(255,251,245,.07);
+  border:1px solid rgba(253,186,116,.25);
+  border-radius:26px;padding:30px 22px 24px;text-align:center;
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  box-shadow:0 30px 80px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.12)
 }
-.progress-ring-wrap{position:relative;width:130px;height:130px;margin:0 auto 20px}
-.progress-ring{transform:rotate(-90deg);width:100%;height:100%}
-.progress-ring-bg{fill:none;stroke:#F5F0E8;stroke-width:8}
-.progress-ring-fill{fill:none;stroke:var(--orange);stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset .3s linear}
-.progress-percent{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.progress-percent .num{font-size:2rem;font-weight:800;color:var(--text);line-height:1}
-.progress-percent .pct{font-size:.8rem;font-weight:800;color:var(--orange)}
-.progress-icon{position:absolute;top:-12px;left:50%;transform:translateX(-50%);width:36px;height:36px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;box-shadow:0 5px 15px rgba(249,115,22,.3);z-index:3}
-.progress-icon svg{width:16px;height:16px;color:#fff;animation:iconSpin 2s linear infinite}
-.progress-icon.done svg{animation:none}
-@keyframes iconSpin{to{transform:rotate(360deg)}}
-.loading-title{font-size:20px;font-weight:800;margin-bottom:6px;color:var(--text)}
-.loading-subtitle{font-size:12px;color:var(--text-soft);margin-bottom:17px;min-height:18px}
-.loading-steps{display:flex;flex-direction:column;gap:7px;text-align:left}
-.step-item{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:10px;background:#FAFAF9;border:1px solid var(--line);opacity:.5;transition:.35s}
-.step-item.active{opacity:1;background:var(--orange-light);border-color:var(--orange-pale);transform:translateX(3px)}
-.step-item.done{opacity:1;background:#F0FDF4;border-color:#86EFAC}
-.step-icon{width:27px;height:27px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;background:var(--line);color:var(--muted);flex-shrink:0}
-.step-icon svg{width:12px;height:12px;display:block}
-.step-item.active .step-icon{background:var(--orange);color:#fff}.step-item.done .step-icon{background:#22C55E;color:#fff}
-.step-text{font-size:11px;font-weight:700;color:var(--text-sub)}
-.loading-bar-wrap{margin-top:18px;width:100%;height:7px;background:#F5F0E8;border-radius:10px;overflow:hidden}
-.loading-bar{height:100%;width:0;background:linear-gradient(90deg,var(--orange),#FB923C);border-radius:10px;transition:width .3s linear}
-.loading-time{margin-top:8px;font-size:10px;color:var(--muted);font-family:monospace;letter-spacing:1px}
+
+.ring-wrap{position:relative;width:168px;height:168px;margin:0 auto 20px}
+.ring-glow{position:absolute;inset:-16px;border-radius:50%;background:radial-gradient(circle,rgba(249,115,22,.35),transparent 65%);animation:glowPulse 2.4s ease-in-out infinite}
+@keyframes glowPulse{0%,100%{opacity:.6;transform:scale(1)}50%{opacity:1;transform:scale(1.08)}}
+.ring-outer{
+  position:absolute;inset:0;border-radius:50%;
+  background:conic-gradient(from 0deg,#FDBA74,#F97316 28%,#FFF3D6 50%,#F97316 72%,#FDBA74);
+  -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 9px),#000 calc(100% - 8px));
+          mask:radial-gradient(farthest-side,transparent calc(100% - 9px),#000 calc(100% - 8px));
+  animation:spin 1.5s linear infinite
+}
+.ring-inner{
+  position:absolute;inset:11px;border-radius:50%;
+  background:conic-gradient(from 180deg,rgba(253,186,116,.9),rgba(249,115,22,.25) 40%,rgba(253,186,116,.9));
+  -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 5px),#000 calc(100% - 4px));
+          mask:radial-gradient(farthest-side,transparent calc(100% - 5px),#000 calc(100% - 4px));
+  animation:spin 2.6s linear infinite reverse;opacity:.85
+}
+.ring-orbit{
+  position:absolute;inset:-14px;border-radius:50%;
+  border:1px dashed rgba(253,186,116,.4);
+  animation:spin 9s linear infinite
+}
+.orbit-dot{
+  position:absolute;top:-4px;left:50%;width:9px;height:9px;margin-left:-4.5px;border-radius:50%;
+  background:#FFEDD5;box-shadow:0 0 12px 3px rgba(251,191,36,.7)
+}
+.ring-core{
+  position:absolute;inset:24px;border-radius:50%;
+  background:radial-gradient(circle at 32% 26%,#fff 0%,var(--ivory) 55%,#FDEBD7 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  box-shadow:0 10px 30px rgba(0,0,0,.35),inset 0 2px 6px rgba(255,255,255,.8)
+}
+.ring-core .pct{
+  font-size:34px;font-weight:800;line-height:1;
+  background:linear-gradient(135deg,var(--orange-deep),var(--orange));
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent
+}
+.ring-core .pct-label{font-size:8px;font-weight:800;letter-spacing:2px;color:var(--muted);margin-top:4px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.loading-title{font-size:21px;font-weight:800;color:#FFF7ED;margin-bottom:5px;letter-spacing:.2px}
+.loading-sub{font-size:12.5px;color:rgba(253,230,183,.9);margin-bottom:18px;min-height:18px;font-weight:600}
+
+.lsteps{display:flex;flex-direction:column;gap:7px;text-align:left;margin-bottom:18px}
+.lstep{
+  display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:11px;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);
+  opacity:.42;transition:all .4s ease;font-size:11.5px;font-weight:700;color:rgba(255,247,237,.92)
+}
+.lstep.active{opacity:1;background:rgba(249,115,22,.18);border-color:rgba(253,186,116,.45);transform:translateX(4px)}
+.lstep.done{opacity:1;background:rgba(34,197,94,.14);border-color:rgba(134,239,172,.4)}
+.lstep-dot{
+  width:24px;height:24px;border-radius:50%;flex:none;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:800;background:rgba(255,255,255,.12);color:rgba(255,255,255,.75)
+}
+.lstep.active .lstep-dot{background:var(--orange);color:#fff;box-shadow:0 0 12px rgba(249,115,22,.6)}
+.lstep.done .lstep-dot{background:#22C55E;color:#fff}
+.lstep-dot svg{width:11px;height:11px;display:block}
+
+.lbar{width:100%;height:7px;border-radius:99px;background:rgba(255,255,255,.13);overflow:hidden}
+.lbar span{
+  display:block;height:100%;width:0;border-radius:99px;
+  background:linear-gradient(90deg,#FB923C,#F97316,#FDBA74);
+  box-shadow:0 0 12px rgba(249,115,22,.6);position:relative;transition:width .25s linear
+}
+.lbar span::after{
+  content:"";position:absolute;inset:0;border-radius:99px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.45),transparent);
+  animation:shimmer 1.6s linear infinite
+}
+@keyframes shimmer{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+.lmeta{margin-top:11px;font-size:10.5px;color:rgba(255,247,237,.55);font-weight:600;font-family:ui-monospace,'Courier New',monospace;letter-spacing:.5px}
+.lmeta b{color:#FDBA74;font-weight:800}
 
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(10px);background:#1C1917;color:#fff;padding:10px 18px;border-radius:999px;font-size:13px;font-weight:700;box-shadow:0 4px 14px rgba(28,25,23,.25);opacity:0;pointer-events:none;transition:opacity .25s ease,transform .25s ease;z-index:100000;white-space:nowrap;max-width:calc(100vw - 32px);overflow:hidden;text-overflow:ellipsis}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -277,6 +345,9 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid rgba(
   .step-label{font-size:8px}.qris-frame{width:78%;padding:17px 13px}.qris-qr-wrap img{width:138px;height:138px}
   .qris-frame-label{font-size:25px}.qris-amount-val{font-size:22px}
   .banner-wrap{padding:14px 14px 0}
+  .loading-card{padding:24px 16px 20px}
+  .ring-wrap{width:142px;height:142px}
+  .ring-core .pct{font-size:29px}
 }
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}
@@ -342,7 +413,7 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid rgba(
   <div class="content">
 
     <div class="page-title">Pembayaran QRIS</div>
-    <div class="page-subtitle">Selesaikan pembayaran sebelum waktu habis, lalu unggah bukti pembayaran Anda.</div>
+    <div class="page-subtitle">Selesaikan pembayaran sebelum waktu habis, lalu konfirmasi via WhatsApp admin.</div>
 
     <div class="card">
       <div class="order-label">Kode Pesanan</div>
@@ -399,8 +470,8 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid rgba(
         <span class="upload-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="m7 9 5-5 5 5"/><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"/></svg>
         </span>
-        <h2>Unggah Bukti Pembayaran</h2>
-        <p>Klik untuk memilih screenshot atau foto bukti transfer QRIS Anda.</p>
+        <h2>Pilih Screenshot Bukti Pembayaran</h2>
+        <p>Pilih screenshot bukti transfer QRIS Anda. Screenshot ini akan Anda kirim ke admin via WhatsApp pada langkah berikutnya.</p>
         <span class="file-types"><span>JPG</span><span>PNG</span><span>Maks 10 MB</span></span>
         <input type="file" id="file" class="sr-only-file" accept="image/jpeg,image/png" aria-label="Pilih file bukti pembayaran">
       </label>
@@ -410,18 +481,18 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid rgba(
         <div class="file-name" id="fileName"></div>
         <div class="success-msg">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-          File siap dikirim
+          Screenshot siap — jangan lupa lampirkan di WhatsApp
         </div>
       </div>
 
       <div class="checkbox-wrap">
         <input type="checkbox" id="cek">
-        <label for="cek">Saya telah melakukan pembayaran QRIS sesuai nominal di atas dan bukti yang saya unggah adalah benar.</label>
+        <label for="cek">Saya telah melakukan pembayaran QRIS sesuai nominal di atas dan bukti yang saya kirim adalah benar.</label>
       </div>
 
       <button type="button" class="submit-btn" id="btn" disabled>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2 11 13"/><path d="m22 2-7 20-4-9-9-4 20-7z"/></svg>
-        Kirim Bukti Pembayaran
+        Konfirmasi Pembayaran
       </button>
     </div>
 
@@ -430,12 +501,16 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid rgba(
         <div style="width:58px;height:58px;border-radius:50%;background:#DCFCE7;display:flex;align-items:center;justify-content:center;margin:0 auto 12px" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:26px;height:26px"><polyline points="20 6 9 17 4 12"/></svg>
         </div>
-        <h2 style="font-size:16px;font-weight:800;color:var(--text);margin-bottom:6px">Bukti Pembayaran Sudah Terkirim</h2>
-        <p style="font-size:12px;color:var(--text-soft);line-height:1.6;margin-bottom:4px">Bukti untuk pesanan <b id="submittedCode" style="color:var(--orange-deep)">-</b> sudah diterima dan sedang menunggu verifikasi admin.</p>
-        <p style="font-size:11.5px;color:var(--text-soft);line-height:1.6;margin-bottom:14px">Salah unggah bukti? Hubungi admin via <a href="https://wa.me/6282379977693" target="_blank" rel="noopener noreferrer" style="color:var(--orange-deep);font-weight:800">WhatsApp</a> agar dapat dibantu.</p>
-        <a class="btn-redirect" href="eticket.html">Lihat E-Ticket
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        </a>
+        <h2 style="font-size:16px;font-weight:800;color:var(--text);margin-bottom:6px">Konfirmasi Sudah Disiapkan</h2>
+        <p style="font-size:12px;color:var(--text-soft);line-height:1.6;margin-bottom:4px">Detail pesanan <b id="submittedCode" style="color:var(--orange-deep)">-</b> sudah disiapkan di WhatsApp.</p>
+        <p style="font-size:12px;color:var(--text-soft);line-height:1.6;margin-bottom:14px"><b>Lampirkan screenshot bukti transfer</b> di chat tersebut agar admin dapat memverifikasi.</p>
+        <div style="display:grid;gap:10px">
+          <a class="btn-redirect" id="waAgainBtn" href="#" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="currentColor" style="width:15px;height:15px" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+            Buka WhatsApp Admin Lagi
+          </a>
+          <a class="btn-ghost" href="eticket.html">Lihat E-Ticket</a>
+        </div>
       </div>
     </div>
 
@@ -448,28 +523,36 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid rgba(
 
 </div>
 
-<div id="loading" class="loading-overlay" role="dialog" aria-modal="true" aria-label="Memproses pembayaran">
-  <div class="loading-content">
-    <div class="progress-ring-wrap">
-      <div class="progress-icon" id="progressIcon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>
+<!-- ============ LOADING PREMIUM FULLSCREEN ============ -->
+<div id="loading" class="loading-overlay" role="dialog" aria-modal="true" aria-label="Memproses konfirmasi pembayaran">
+  <div class="aurora a1" aria-hidden="true"></div>
+  <div class="aurora a2" aria-hidden="true"></div>
+  <div class="aurora a3" aria-hidden="true"></div>
+
+  <div class="loading-card">
+    <div class="ring-wrap">
+      <div class="ring-glow" aria-hidden="true"></div>
+      <div class="ring-outer" aria-hidden="true"></div>
+      <div class="ring-inner" aria-hidden="true"></div>
+      <div class="ring-orbit" aria-hidden="true"><span class="orbit-dot"></span></div>
+      <div class="ring-core">
+        <span class="pct" id="loadPct">0%</span>
+        <span class="pct-label">MEMPROSES</span>
       </div>
-      <svg class="progress-ring" viewBox="0 0 180 180" aria-hidden="true">
-        <circle class="progress-ring-bg" cx="90" cy="90" r="80"/>
-        <circle class="progress-ring-fill" id="progressCircle" cx="90" cy="90" r="80"/>
-      </svg>
-      <div class="progress-percent"><span class="num" id="progressNum">0</span><span class="pct">%</span></div>
     </div>
-    <div class="loading-title">Memproses Pembayaran</div>
-    <div class="loading-subtitle" id="loadingSubtitle">Menyiapkan unggahan...</div>
-    <div class="loading-steps">
-      <div class="step-item"><span class="step-icon">1</span><span class="step-text">Mengunggah bukti pembayaran</span></div>
-      <div class="step-item"><span class="step-icon">2</span><span class="step-text">Memproses unggahan</span></div>
-      <div class="step-item"><span class="step-icon">3</span><span class="step-text">Mengirim bukti ke admin</span></div>
-      <div class="step-item"><span class="step-icon">4</span><span class="step-text">Menyelesaikan</span></div>
+
+    <div class="loading-title">Konfirmasi Pembayaran</div>
+    <div class="loading-sub" id="loadSub">Menyiapkan data pesanan Anda…</div>
+
+    <div class="lsteps" aria-hidden="true">
+      <div class="lstep"><span class="lstep-dot">1</span><span>Memeriksa data pesanan Anda</span></div>
+      <div class="lstep"><span class="lstep-dot">2</span><span>Menyiapkan detail pembayaran</span></div>
+      <div class="lstep"><span class="lstep-dot">3</span><span>Menyusun pesan untuk admin</span></div>
+      <div class="lstep"><span class="lstep-dot">4</span><span>Membuka WhatsApp admin…</span></div>
     </div>
-    <div class="loading-bar-wrap"><div class="loading-bar" id="loadingBar"></div></div>
-    <div class="loading-time" id="loadingTime">00:00 / 05:00</div>
+
+    <div class="lbar"><span id="loadBar"></span></div>
+    <div class="lmeta"><b id="loadLeft">03:00</b> tersisa &bull; jangan tutup halaman ini</div>
   </div>
 </div>
 
@@ -477,22 +560,29 @@ a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid rgba(
 (function(){
 'use strict';
 
-const FORMSPREE_ENDPOINT='https://formspree.io/f/mwlkkjkw';
+/* ================= KONFIGURASI ================= */
+const WA_ADMIN='6282379977693';
 const HALAMAN_ETICKET='eticket.html';
 const HALAMAN_TIKET='tiket.html';
-const DURASI_TIMER=300;
-const DURASI_ANIMASI=3500;
-const BATAS_UNGGAH=30000;
+const DURASI_TIMER=300;        // timer pembayaran (detik)
+const DURASI_LOADING=180000;   // <<< durasi loading premium: 3 MENIT. Untuk tes cepat ganti 10000 (10 detik).
 const MAX_FILE=10*1024*1024;
 const TYPES=['image/jpeg','image/png'];
-const SUBS=['Mengunggah bukti pembayaran...','Memproses unggahan...','Mengirim bukti ke admin...','Menyelesaikan...','Bukti pembayaran terkirim.'];
+const STEPS=[
+  'Memeriksa data pesanan Anda…',
+  'Menyiapkan detail pembayaran…',
+  'Menyusun pesan untuk admin…',
+  'Membuka WhatsApp admin…'
+];
 const ICON_CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+/* ================================================ */
 
 const timerEl=document.getElementById('timer');
 const timerBoxEl=document.getElementById('timerBox');
 const uploadCardEl=document.getElementById('uploadCard');
 const submittedCardEl=document.getElementById('submittedCard');
 const submittedCodeEl=document.getElementById('submittedCode');
+const waAgainBtn=document.getElementById('waAgainBtn');
 const orderIdEl=document.getElementById('orderId');
 const totalEl=document.getElementById('total');
 const qrisTotalEl=document.getElementById('qrisTotalAmount');
@@ -507,24 +597,15 @@ const previewImg=document.getElementById('previewImg');
 const previewBox=document.getElementById('preview');
 const fileNameEl=document.getElementById('fileName');
 const loadingEl=document.getElementById('loading');
-const circle=document.getElementById('progressCircle');
-const numEl=document.getElementById('progressNum');
-const barEl=document.getElementById('loadingBar');
-const subtitleEl=document.getElementById('loadingSubtitle');
-const timeEl=document.getElementById('loadingTime');
-const progressIcon=document.getElementById('progressIcon');
-const stepEls=Array.prototype.slice.call(document.querySelectorAll('.step-item'));
-const C=2*Math.PI*80;
+const pctEl=document.getElementById('loadPct');
+const subEl=document.getElementById('loadSub');
+const barEl=document.getElementById('loadBar');
+const leftEl=document.getElementById('loadLeft');
+const stepEls=Array.prototype.slice.call(document.querySelectorAll('.lstep'));
 
-let toastEl=null;
-let toastTimer=null;
+let toastEl=null,toastTimer=null;
 function toast(pesan){
-  if(!toastEl){
-    toastEl=document.createElement('div');
-    toastEl.className='toast';
-    toastEl.setAttribute('role','status');
-    document.body.appendChild(toastEl);
-  }
+  if(!toastEl){toastEl=document.createElement('div');toastEl.className='toast';toastEl.setAttribute('role','status');document.body.appendChild(toastEl);}
   toastEl.textContent=pesan;
   requestAnimationFrame(()=>toastEl.classList.add('show'));
   clearTimeout(toastTimer);
@@ -544,7 +625,6 @@ const harga=cart.harga||Number(localStorage.getItem('hargaTiket'))||0;
 const total=cart.totalPrice||Number(localStorage.getItem('totalHarga'))||(qty*harga);
 const namaPemesan=orderData.nama||'-';
 const waPemesan=orderData.wa||'-';
-const emailPemesan=orderData.email||'';
 
 if(qty<1||!(total>0)){
   toast('Pesanan tidak ditemukan. Mengarahkan ke halaman tiket...');
@@ -557,9 +637,6 @@ if(!orderCode){
   orderCode='CMV10-'+Date.now().toString(36).toUpperCase().slice(-5)+Math.random().toString(36).toUpperCase().slice(2,5);
   try{localStorage.setItem('commvaganza_order_code',orderCode);}catch(e){}
 }
-if(!localStorage.getItem('commvaganza_order_id')){
-  try{localStorage.setItem('commvaganza_order_id','ORD-'+Date.now());}catch(e){}
-}
 
 orderIdEl.textContent=orderCode;
 totalEl.textContent=format(total);
@@ -569,20 +646,40 @@ jumlahEl.textContent=qty+' Tiket';
 namaEl.textContent=namaPemesan;
 waEl.textContent=waPemesan;
 
-/* Bukti sudah terkirim untuk pesanan ini? Tampilkan kartu status, cegah duplikat. */
+/* ---------- Pesan WhatsApp (detail pesanan otomatis) ---------- */
+function waURL(){
+  const baris=[
+    'Halo Admin COMMVAGANZA 10.0, saya sudah bayar QRIS dan ingin konfirmasi pembayaran.',
+    '',
+    'Kode Order: '+orderCode,
+    'Nama: '+namaPemesan,
+    'No. WA: '+waPemesan,
+    'Tiket: '+qty+'x '+jenis,
+    'Total: '+format(total),
+    '',
+    'Bukti transfer saya lampirkan di chat ini. Terima kasih!'
+  ];
+  return 'https://wa.me/'+WA_ADMIN+'?text='+encodeURIComponent(baris.join('\n'));
+}
+
+/* ---------- Status sudah konfirmasi (anti duplikat) ---------- */
 let submittedFor=null;
 try{submittedFor=localStorage.getItem('commvaganza_payment_proof_submitted');}catch(e){}
-if(submittedFor===orderCode){
+
+function tampilkanSudahSubmit(){
   if(timerBoxEl)timerBoxEl.style.display='none';
   if(uploadCardEl)uploadCardEl.hidden=true;
-  if(submittedCardEl){
-    if(submittedCodeEl)submittedCodeEl.textContent=orderCode;
-    submittedCardEl.hidden=false;
-  }
+  if(submittedCodeEl)submittedCodeEl.textContent=orderCode;
+  if(waAgainBtn)waAgainBtn.href=waURL();
+  if(submittedCardEl)submittedCardEl.hidden=false;
+}
+
+if(submittedFor===orderCode){
+  tampilkanSudahSubmit();
   return;
 }
 
-/* Timer tahan-refresh: expiry disimpan per kode pesanan. */
+/* ---------- Timer pembayaran (tahan refresh) ---------- */
 let expiryData=null;
 try{expiryData=JSON.parse(localStorage.getItem('commvaganza_payment_expiry')||'null');}catch(e){}
 if(!expiryData||expiryData.code!==orderCode){
@@ -598,17 +695,12 @@ if(sisa<=0){
 }
 
 let timerInterval=null;
-let isProcessing=false;
-let uploaded=false;
-let objectUrl=null;
-
 function renderTimer(){
   timerEl.textContent=pad(Math.floor(sisa/60))+':'+pad(sisa%60);
   timerEl.classList.toggle('urgent',sisa<=30&&sisa>0);
 }
 renderTimer();
 timerInterval=setInterval(function(){
-  if(isProcessing)return;
   sisa=Math.ceil((expiryData.exp-Date.now())/1000);
   if(sisa<=0){
     clearInterval(timerInterval);
@@ -619,9 +711,12 @@ timerInterval=setInterval(function(){
   renderTimer();
 },500);
 
+/* ---------- Upload (dipilih, dikirim manual via WA) ---------- */
 function syncButton(){
   btn.disabled=!(uploaded&&cekInput.checked);
 }
+let uploaded=false;
+let objectUrl=null;
 
 fileInput.addEventListener('change',function(){
   const file=this.files&&this.files[0];
@@ -648,111 +743,74 @@ fileInput.addEventListener('change',function(){
 });
 cekInput.addEventListener('change',syncButton);
 
-circle.style.strokeDasharray=C;
-circle.style.strokeDashoffset=C;
+/* ---------- Loading premium 3 menit → redirect WhatsApp ---------- */
+let isProcessing=false;
+let loadRAF=null;
 
-function markDoneStep(el){
-  const icon=el.querySelector('.step-icon');
-  if(icon&&!icon.dataset.done){
-    icon.dataset.done='1';
-    icon.innerHTML=ICON_CHECK;
+window.addEventListener('beforeunload',function(e){
+  if(isProcessing){e.preventDefault();e.returnValue='';}
+});
+
+function startLoading(){
+  loadingEl.classList.add('active');
+  document.body.classList.add('no-scroll');
+  const start=performance.now();
+
+  function tick(now){
+    const p=Math.min((now-start)/DURASI_LOADING,1);
+    const pct=Math.floor(p*100);
+    pctEl.textContent=pct+'%';
+    barEl.style.width=pct+'%';
+    const leftS=Math.max(0,Math.ceil((DURASI_LOADING-(now-start))/1000));
+    leftEl.textContent=pad(Math.floor(leftS/60))+':'+pad(leftS%60);
+    const idx=Math.min(Math.floor(p*STEPS.length),STEPS.length-1);
+    subEl.textContent=STEPS[idx];
+    stepEls.forEach(function(el,i){
+      el.classList.toggle('active',i===idx);
+      el.classList.toggle('done',i<idx);
+      if(i<idx){
+        const dot=el.querySelector('.lstep-dot');
+        if(dot&&!dot.dataset.done){dot.dataset.done='1';dot.innerHTML=ICON_CHECK;}
+      }
+    });
+    if(p<1){
+      loadRAF=requestAnimationFrame(tick);
+    }else{
+      selesai();
+    }
   }
+  loadRAF=requestAnimationFrame(tick);
 }
 
-function kirimBukti(file){
-  const fd=new FormData();
-  fd.append('_subject','Bukti Pembayaran - COMMVAGANZA 10.0 ['+orderCode+']');
-  if(emailPemesan)fd.append('_replyto',emailPemesan);
-  fd.append('Kode Order',orderCode);
-  fd.append('Nama Pemesan',namaPemesan);
-  fd.append('No. WhatsApp',waPemesan);
-  if(emailPemesan)fd.append('Email',emailPemesan);
-  fd.append('Jenis Tiket',jenis);
-  fd.append('Jumlah Tiket',String(qty));
-  fd.append('Total Bayar',format(total));
-  fd.append('Waktu Pembayaran',new Date().toLocaleString('id-ID'));
-  fd.append('bukti_pembayaran',file,file.name);
-  const kirim=fetch(FORMSPREE_ENDPOINT,{
-    method:'POST',
-    headers:{'Accept':'application/json'},
-    body:fd
-  }).then(function(r){
-    if(!r.ok)throw new Error('HTTP '+r.status);
+function selesai(){
+  stepEls.forEach(function(el){
+    el.classList.remove('active');
+    el.classList.add('done');
+    const dot=el.querySelector('.lstep-dot');
+    if(dot&&!dot.dataset.done){dot.dataset.done='1';dot.innerHTML=ICON_CHECK;}
   });
-  const batas=new Promise(function(_,reject){
-    setTimeout(function(){reject(new Error('Batas waktu terlampaui.'));},BATAS_UNGGAH);
-  });
-  return Promise.race([kirim,batas]);
+  subEl.textContent='Selesai! Membuka WhatsApp admin…';
+  pctEl.textContent='100%';
+  barEl.style.width='100%';
+  leftEl.textContent='00:00';
+
+  try{
+    localStorage.setItem('commvaganza_payment_proof_submitted',orderCode);
+    localStorage.removeItem('commvaganza_payment_expiry');
+  }catch(e){}
+  clearInterval(timerInterval);
+
+  /* Pindah tab yang sama ke wa.me — tidak bisa diblokir popup blocker */
+  setTimeout(function(){location.assign(waURL());},700);
 }
 
 btn.addEventListener('click',function(){
   if(btn.disabled||isProcessing)return;
   const file=fileInput.files&&fileInput.files[0];
   if(!file)return;
-
   isProcessing=true;
-  clearInterval(timerInterval);
   btn.disabled=true;
-  loadingEl.classList.add('active');
-  document.body.classList.add('no-scroll');
-
-  const start=Date.now();
-  let uploadError=null;
-  const unggah=kirimBukti(file);
-  unggah.catch(function(e){uploadError=e||new Error('Gagal mengunggah');});
-
-  function showUploadError(){
-    loadingEl.classList.remove('active');
-    document.body.classList.remove('no-scroll');
-    isProcessing=false;
-    syncButton();
-    toast('Bukti pembayaran gagal terkirim. Periksa koneksi internet lalu coba lagi.');
-  }
-
-  function frame(){
-    if(uploadError){showUploadError();return;}
-    const p=Math.min((Date.now()-start)/DURASI_ANIMASI,1);
-    const pct=Math.floor(p*100);
-    circle.style.strokeDashoffset=C*(1-p);
-    numEl.textContent=pct;
-    barEl.style.width=pct+'%';
-    timeEl.textContent='00:'+pad(Math.floor((Date.now()-start)/1000))+' / 05:00';
-    subtitleEl.textContent=SUBS[Math.min(Math.floor(p*SUBS.length),SUBS.length-1)];
-    const active=Math.min(Math.floor(p*stepEls.length),stepEls.length-1);
-    stepEls.forEach(function(el,i){
-      el.classList.toggle('done',i<active);
-      el.classList.toggle('active',i===active);
-      if(i<active)markDoneStep(el);
-    });
-    if(p<1)requestAnimationFrame(frame);
-    else finish();
-  }
-
-  function finish(){
-    if(uploadError){showUploadError();return;}
-    unggah.then(function(){
-      stepEls.forEach(function(el){
-        el.classList.remove('active');
-        el.classList.add('done');
-        markDoneStep(el);
-      });
-      progressIcon.classList.add('done');
-      progressIcon.innerHTML=ICON_CHECK;
-      numEl.textContent='100';
-      barEl.style.width='100%';
-      subtitleEl.textContent='Bukti pembayaran terkirim. Menunggu verifikasi admin.';
-      try{
-        localStorage.setItem('commvaganza_payment_proof_submitted',orderCode);
-        localStorage.removeItem('commvaganza_payment_expiry');
-      }catch(e){}
-      setTimeout(function(){location.assign(HALAMAN_ETICKET);},800);
-    }).catch(function(e){
-      console.error('Formspree:',e);
-      showUploadError();
-    });
-  }
-
-  requestAnimationFrame(frame);
+  startLoading();
 });
 })();
 </script>
