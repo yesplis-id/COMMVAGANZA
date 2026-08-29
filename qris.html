@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -47,7 +46,7 @@ body{
   -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale
 }
 body.no-scroll{overflow:hidden!important}
-a:focus-visible,button:focus-visible,input:focus-visible,label:focus-within{outline:3px solid rgba(249,115,22,.45);outline-offset:3px}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid rgba(249,115,22,.45);outline-offset:3px}
 .container{
   width:100%;max-width:520px;min-height:100vh;margin:auto;
   background:linear-gradient(180deg,#fff 0%,var(--ivory) 100%);
@@ -187,6 +186,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,label:focus-within{outl
 .qris-frame-methods{display:flex;gap:9px;font-size:11px;color:rgba(253,186,116,.8)}
 .scan-hint{margin:0 0 18px;font-size:11px;color:var(--text-soft);display:flex;align-items:center;justify-content:center;gap:6px}
 .scan-hint svg{width:14px;height:14px;color:var(--orange);flex:none}
+.scan-hint-admin{margin:-10px 0 18px;font-size:11px;color:var(--text-soft);text-align:center}
+.scan-hint-admin a{color:var(--orange-deep);font-weight:800;text-decoration:none;border-bottom:1px dashed rgba(249,115,22,.4)}
 
 .upload-area{
   border:1.5px solid var(--orange-pale);border-radius:17px;padding:24px 16px;text-align:center;cursor:pointer;
@@ -222,6 +223,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,label:focus-within{outl
 .submit-btn:hover:not(:disabled)::before{left:100%}
 .submit-btn:disabled{opacity:.48;cursor:not-allowed;box-shadow:none}
 .submit-btn:disabled::before{display:none}
+
+.btn-redirect{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:13px;border-radius:12px;background:linear-gradient(135deg,var(--orange),var(--orange-deep));color:#fff;font-weight:800;font-size:13px;text-decoration:none;box-shadow:0 8px 20px rgba(249,115,22,.22);transition:.25s;font-family:'Plus Jakarta Sans',sans-serif;touch-action:manipulation}
+.btn-redirect:hover{transform:translateY(-1px);box-shadow:0 11px 25px rgba(249,115,22,.3)}
+.btn-redirect svg{width:15px;height:15px;flex:none}
 
 .site-footer{text-align:center;padding:2px 16px 0}
 .footer-copy{font-size:11px;font-weight:500;color:var(--text);opacity:.45}
@@ -352,7 +357,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,label:focus-within{outl
       </div>
     </div>
 
-    <div class="timer-box">
+    <div class="timer-box" id="timerBox">
       <span class="timer-label">Selesaikan pembayaran dalam</span>
       <span class="timer" id="timer">05:00</span>
     </div>
@@ -365,9 +370,10 @@ a:focus-visible,button:focus-visible,input:focus-visible,label:focus-within{outl
       </div>
       <div class="qris-frame-body">
         <div class="qris-qr-wrap">
-          <img src="qris.png" alt="QR Code pembayaran QRIS" width="150" height="150">
+          <img src="qris.png" alt="QR Code pembayaran QRIS" width="150" height="150" onerror="this.style.display='none';var f=document.getElementById('qrFallback');if(f)f.style.display='block';">
           <span class="qris-scan-line" aria-hidden="true"></span>
         </div>
+        <div id="qrFallback" style="display:none;font-size:10px;color:#FDBA74;font-weight:600;padding:4px 0 8px">⚠️ QR gagal dimuat. Periksa koneksi lalu muat ulang halaman.</div>
         <div class="qris-frame-label">QRIS</div>
         <div class="qris-frame-standard">QR Code Indonesian Standard</div>
         <span class="qris-frame-scan">Scan QR untuk Membayar</span>
@@ -377,7 +383,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,label:focus-within{outl
         </div>
       </div>
       <div class="qris-frame-footer">
-        <span class="qris-frame-nmid">NMID: ID102026COMMVAGANZA</span>
+        <span class="qris-frame-nmid">Merchant: COMMVAGANZA 10.0</span>
         <span class="qris-frame-methods"><span>GoPay</span><span>OVO</span><span>DANA</span></span>
       </div>
     </div>
@@ -386,8 +392,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,label:focus-within{outl
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M7 12h10"/></svg>
       Scan dengan aplikasi e-wallet atau m-banking favoritmu
     </p>
+    <p class="scan-hint-admin">QRIS mencapai batas transaksi? <a href="qris-limit.html">Bayar via admin</a></p>
 
-    <div class="card">
+    <div class="card" id="uploadCard">
       <label class="upload-area" for="file">
         <span class="upload-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="m7 9 5-5 5 5"/><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"/></svg>
@@ -418,6 +425,20 @@ a:focus-visible,button:focus-visible,input:focus-visible,label:focus-within{outl
       </button>
     </div>
 
+    <div class="card" id="submittedCard" hidden>
+      <div style="text-align:center;padding:6px 2px">
+        <div style="width:58px;height:58px;border-radius:50%;background:#DCFCE7;display:flex;align-items:center;justify-content:center;margin:0 auto 12px" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width:26px;height:26px"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <h2 style="font-size:16px;font-weight:800;color:var(--text);margin-bottom:6px">Bukti Pembayaran Sudah Terkirim</h2>
+        <p style="font-size:12px;color:var(--text-soft);line-height:1.6;margin-bottom:4px">Bukti untuk pesanan <b id="submittedCode" style="color:var(--orange-deep)">-</b> sudah diterima dan sedang menunggu verifikasi admin.</p>
+        <p style="font-size:11.5px;color:var(--text-soft);line-height:1.6;margin-bottom:14px">Salah unggah bukti? Hubungi admin via <a href="https://wa.me/6282379977693" target="_blank" rel="noopener noreferrer" style="color:var(--orange-deep);font-weight:800">WhatsApp</a> agar dapat dibantu.</p>
+        <a class="btn-redirect" href="eticket.html">Lihat E-Ticket
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:15px;height:15px" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+
     <footer class="site-footer">
       <img class="footer-logo" src="https://raw.githubusercontent.com/eticketonline2026/Commvaganza/main/logo-saya.jpg" alt="Yesplis" width="30" height="30" loading="lazy" decoding="async">
       <p class="footer-copy">&copy;2026 Picnic Music Festival COMMVAGANZA 10.0</p>
@@ -443,9 +464,9 @@ a:focus-visible,button:focus-visible,input:focus-visible,label:focus-within{outl
     <div class="loading-subtitle" id="loadingSubtitle">Menyiapkan unggahan...</div>
     <div class="loading-steps">
       <div class="step-item"><span class="step-icon">1</span><span class="step-text">Mengunggah bukti pembayaran</span></div>
-      <div class="step-item"><span class="step-icon">2</span><span class="step-text">Menyimpan bukti pembayaran</span></div>
-      <div class="step-item"><span class="step-icon">3</span><span class="step-text">Mengirim untuk verifikasi admin</span></div>
-      <div class="step-item"><span class="step-icon">4</span><span class="step-text">Menunggu persetujuan admin</span></div>
+      <div class="step-item"><span class="step-icon">2</span><span class="step-text">Memproses unggahan</span></div>
+      <div class="step-item"><span class="step-icon">3</span><span class="step-text">Mengirim bukti ke admin</span></div>
+      <div class="step-item"><span class="step-icon">4</span><span class="step-text">Menyelesaikan</span></div>
     </div>
     <div class="loading-bar-wrap"><div class="loading-bar" id="loadingBar"></div></div>
     <div class="loading-time" id="loadingTime">00:00 / 05:00</div>
@@ -464,10 +485,14 @@ const DURASI_ANIMASI=3500;
 const BATAS_UNGGAH=30000;
 const MAX_FILE=10*1024*1024;
 const TYPES=['image/jpeg','image/png'];
-const SUBS=['Mengunggah bukti pembayaran...','Menyimpan bukti pembayaran...','Mengirim untuk verifikasi admin...','Menunggu persetujuan admin...','Bukti pembayaran terkirim.'];
+const SUBS=['Mengunggah bukti pembayaran...','Memproses unggahan...','Mengirim bukti ke admin...','Menyelesaikan...','Bukti pembayaran terkirim.'];
 const ICON_CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
 
 const timerEl=document.getElementById('timer');
+const timerBoxEl=document.getElementById('timerBox');
+const uploadCardEl=document.getElementById('uploadCard');
+const submittedCardEl=document.getElementById('submittedCard');
+const submittedCodeEl=document.getElementById('submittedCode');
 const orderIdEl=document.getElementById('orderId');
 const totalEl=document.getElementById('total');
 const qrisTotalEl=document.getElementById('qrisTotalAmount');
@@ -544,26 +569,55 @@ jumlahEl.textContent=qty+' Tiket';
 namaEl.textContent=namaPemesan;
 waEl.textContent=waPemesan;
 
-let duration=DURASI_TIMER;
+/* Bukti sudah terkirim untuk pesanan ini? Tampilkan kartu status, cegah duplikat. */
+let submittedFor=null;
+try{submittedFor=localStorage.getItem('commvaganza_payment_proof_submitted');}catch(e){}
+if(submittedFor===orderCode){
+  if(timerBoxEl)timerBoxEl.style.display='none';
+  if(uploadCardEl)uploadCardEl.hidden=true;
+  if(submittedCardEl){
+    if(submittedCodeEl)submittedCodeEl.textContent=orderCode;
+    submittedCardEl.hidden=false;
+  }
+  return;
+}
+
+/* Timer tahan-refresh: expiry disimpan per kode pesanan. */
+let expiryData=null;
+try{expiryData=JSON.parse(localStorage.getItem('commvaganza_payment_expiry')||'null');}catch(e){}
+if(!expiryData||expiryData.code!==orderCode){
+  expiryData={code:orderCode,exp:Date.now()+DURASI_TIMER*1000};
+  try{localStorage.setItem('commvaganza_payment_expiry',JSON.stringify(expiryData));}catch(e){}
+}
+
+let sisa=Math.ceil((expiryData.exp-Date.now())/1000);
+if(sisa<=0){
+  toast('Waktu pembayaran habis. Mengarahkan ke halaman tiket...');
+  setTimeout(()=>{location.assign(HALAMAN_TIKET);},1500);
+  return;
+}
+
 let timerInterval=null;
 let isProcessing=false;
 let uploaded=false;
 let objectUrl=null;
 
-function timerRun(){
+function renderTimer(){
+  timerEl.textContent=pad(Math.floor(sisa/60))+':'+pad(sisa%60);
+  timerEl.classList.toggle('urgent',sisa<=30&&sisa>0);
+}
+renderTimer();
+timerInterval=setInterval(function(){
   if(isProcessing)return;
-  timerEl.textContent=pad(Math.floor(duration/60))+':'+pad(duration%60);
-  timerEl.classList.toggle('urgent',duration<=30&&duration>0);
-  if(duration<=0){
+  sisa=Math.ceil((expiryData.exp-Date.now())/1000);
+  if(sisa<=0){
     clearInterval(timerInterval);
     toast('Waktu pembayaran habis. Mengarahkan ke halaman tiket...');
     setTimeout(()=>{location.assign(HALAMAN_TIKET);},1500);
     return;
   }
-  duration--;
-}
-timerRun();
-timerInterval=setInterval(timerRun,1000);
+  renderTimer();
+},500);
 
 function syncButton(){
   btn.disabled=!(uploaded&&cekInput.checked);
@@ -643,10 +697,20 @@ btn.addEventListener('click',function(){
   document.body.classList.add('no-scroll');
 
   const start=Date.now();
+  let uploadError=null;
   const unggah=kirimBukti(file);
-  unggah.catch(function(){});
+  unggah.catch(function(e){uploadError=e||new Error('Gagal mengunggah');});
+
+  function showUploadError(){
+    loadingEl.classList.remove('active');
+    document.body.classList.remove('no-scroll');
+    isProcessing=false;
+    syncButton();
+    toast('Bukti pembayaran gagal terkirim. Periksa koneksi internet lalu coba lagi.');
+  }
 
   function frame(){
+    if(uploadError){showUploadError();return;}
     const p=Math.min((Date.now()-start)/DURASI_ANIMASI,1);
     const pct=Math.floor(p*100);
     circle.style.strokeDashoffset=C*(1-p);
@@ -665,6 +729,7 @@ btn.addEventListener('click',function(){
   }
 
   function finish(){
+    if(uploadError){showUploadError();return;}
     unggah.then(function(){
       stepEls.forEach(function(el){
         el.classList.remove('active');
@@ -676,15 +741,14 @@ btn.addEventListener('click',function(){
       numEl.textContent='100';
       barEl.style.width='100%';
       subtitleEl.textContent='Bukti pembayaran terkirim. Menunggu verifikasi admin.';
-      try{localStorage.setItem('commvaganza_payment_proof_submitted','1');}catch(e){}
+      try{
+        localStorage.setItem('commvaganza_payment_proof_submitted',orderCode);
+        localStorage.removeItem('commvaganza_payment_expiry');
+      }catch(e){}
       setTimeout(function(){location.assign(HALAMAN_ETICKET);},800);
     }).catch(function(e){
       console.error('Formspree:',e);
-      loadingEl.classList.remove('active');
-      document.body.classList.remove('no-scroll');
-      isProcessing=false;
-      syncButton();
-      toast('Bukti pembayaran gagal terkirim. Periksa koneksi internet lalu coba lagi.');
+      showUploadError();
     });
   }
 
