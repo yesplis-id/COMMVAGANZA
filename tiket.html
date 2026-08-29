@@ -8,9 +8,7 @@
 <title>Pilih Tiket - COMMVAGANZA 10.0</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://cdn.jsdelivr.net">
-<link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-<link rel="prefetch" href="form.html">
+<link rel="prefetch" href="qris.html">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%AB%3C/text%3E%3C/svg%3E">
 <style>
@@ -21,7 +19,6 @@
   --red:#EF4444;--green:#22C55E;
   --shadow-sm:0 1px 2px rgba(28,25,23,.04),0 1px 3px rgba(28,25,23,.06);
   --shadow-md:0 4px 12px rgba(28,25,23,.06),0 2px 4px rgba(28,25,23,.04);
-  --shadow-lg:0 12px 32px rgba(249,115,22,.14),0 4px 12px rgba(28,25,23,.06);
   --radius:18px;--ease:cubic-bezier(.4,0,.2,1);--ease-bounce:cubic-bezier(.34,1.56,.64,1);
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -162,8 +159,8 @@ body{min-height:100vh}
 
   <div class="fomo-banner" role="marquee" aria-label="Informasi ketersediaan tiket">
     <div class="fomo-track">
-      <span class="fomo-item">Kuota Terbatas <span class="fomo-sep"></span> Tersisa <span class="fomo-accent remaining-seats">memuat...</span> untuk Picnic Music Festival COMMVAGANZA 10.0 <span class="fomo-sep"></span> 12 September 2026 &middot; Bandar Lampung <span class="fomo-sep"></span> Pesan Sekarang Sebelum Kehabisan</span>
-      <span class="fomo-item" aria-hidden="true">Kuota Terbatas <span class="fomo-sep"></span> Tersisa <span class="fomo-accent remaining-seats">memuat...</span> untuk Picnic Music Festival COMMVAGANZA 10.0 <span class="fomo-sep"></span> 12 September 2026 &middot; Bandar Lampung <span class="fomo-sep"></span> Pesan Sekarang Sebelum Kehabisan</span>
+      <span class="fomo-item"><span class="fomo-accent">Kuota Terbatas</span> <span class="fomo-sep"></span> Picnic Music Festival COMMVAGANZA 10.0 <span class="fomo-sep"></span> 12 September 2026 &middot; Bandar Lampung <span class="fomo-sep"></span> Pesan Sekarang Sebelum Kehabisan</span>
+      <span class="fomo-item" aria-hidden="true"><span class="fomo-accent">Kuota Terbatas</span> <span class="fomo-sep"></span> Picnic Music Festival COMMVAGANZA 10.0 <span class="fomo-sep"></span> 12 September 2026 &middot; Bandar Lampung <span class="fomo-sep"></span> Pesan Sekarang Sebelum Kehabisan</span>
     </div>
   </div>
 
@@ -221,13 +218,13 @@ body{min-height:100vh}
       </div>
     </article>
 
-    <article class="ticket-card active reveal" id="mainTicketCard">
+    <article class="ticket-card active reveal">
       <div class="ticket-header">
         <div class="ticket-info">
           <h3>Normal Sale 2</h3>
-          <div class="ticket-price" id="ticketPrice">Rp 210.000</div>
+          <div class="ticket-price">Rp 210.000</div>
         </div>
-        <div class="status-badge status-available" id="mainStatusBadge">Tersedia</div>
+        <div class="status-badge status-available">Tersedia</div>
       </div>
       <div class="quantity-wrapper">
         <div class="quantity-label">Jumlah Tiket</div>
@@ -249,42 +246,42 @@ body{min-height:100vh}
 <div class="bottom">
   <button type="button" id="checkoutButton" class="checkout-btn" disabled>
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-    Checkout
+    <span class="btn-label">Checkout</span>
   </button>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="config.js"></script>
 <script>
 (function(){
 'use strict';
 
-const maksimalTiket=5;
-const HARGA_DEFAULT=210000;
+const FORMSPREE_ENDPOINT='https://formspree.io/f/mwlkkjkw';
+const HALAMAN_TUJUAN='qris.html';
+const KATEGORI_TIKET='Normal Sale 2';
+const HARGA_SATUAN=210000;
+const MAKSIMAL_TIKET=5;
+const BATAS_KIRIM=4000;
+
 let jumlahTiket=0;
-let serverPrice=HARGA_DEFAULT;
-let serverAvailable=maksimalTiket;
+let mengirim=false;
 
 const jumlahElement=document.getElementById('jumlahTiket');
-const priceElement=document.getElementById('ticketPrice');
 const checkoutButton=document.getElementById('checkoutButton');
+const btnLabel=checkoutButton.querySelector('.btn-label');
 const minusBtn=document.getElementById('minusBtn');
 const plusBtn=document.getElementById('plusBtn');
 const backBtn=document.getElementById('backBtn');
-const mainCard=document.getElementById('mainTicketCard');
-const mainBadge=document.getElementById('mainStatusBadge');
 const couponLink=document.querySelector('.coupon-link');
 
 let toastEl=null;
 let toastTimer=null;
-function toast(msg){
+function toast(pesan){
   if(!toastEl){
     toastEl=document.createElement('div');
     toastEl.className='toast';
     toastEl.setAttribute('role','status');
     document.body.appendChild(toastEl);
   }
-  toastEl.textContent=msg;
+  toastEl.textContent=pesan;
   requestAnimationFrame(()=>toastEl.classList.add('show'));
   clearTimeout(toastTimer);
   toastTimer=setTimeout(()=>toastEl.classList.remove('show'),2200);
@@ -294,38 +291,30 @@ function formatRupiah(n){
   return 'Rp '+Number(n).toLocaleString('id-ID');
 }
 
-function setRemaining(text){
-  document.querySelectorAll('.remaining-seats').forEach(el=>{el.textContent=text;});
-}
-
-function markSoldOut(){
-  if(!mainCard)return;
-  mainBadge.textContent='Habis';
-  mainBadge.className='status-badge status-sold';
-  mainCard.classList.remove('active');
-  mainCard.classList.add('sold-out');
-  const qw=mainCard.querySelector('.quantity-wrapper');
-  if(qw)qw.style.display='none';
+function simpanPesanan(){
+  try{
+    localStorage.setItem('jumlahTiket',String(jumlahTiket));
+    localStorage.setItem('kategoriTiket',KATEGORI_TIKET);
+    localStorage.setItem('hargaTiket',String(HARGA_SATUAN));
+    localStorage.setItem('totalHarga',String(HARGA_SATUAN*jumlahTiket));
+  }catch(e){console.warn('localStorage:',e);}
 }
 
 function updateTampilan(){
   jumlahElement.textContent=jumlahTiket;
   minusBtn.disabled=jumlahTiket===0;
-  plusBtn.disabled=jumlahTiket>=Math.min(maksimalTiket,serverAvailable);
+  plusBtn.disabled=jumlahTiket>=MAKSIMAL_TIKET;
   checkoutButton.classList.toggle('active',jumlahTiket>=1);
-  checkoutButton.disabled=jumlahTiket<1;
+  checkoutButton.disabled=jumlahTiket<1||mengirim;
+  simpanPesanan();
 }
 
 plusBtn.addEventListener('click',()=>{
-  if(jumlahTiket<Math.min(maksimalTiket,serverAvailable)){
+  if(jumlahTiket<MAKSIMAL_TIKET){
     jumlahTiket++;
     updateTampilan();
-  }else if(serverAvailable<1){
-    toast('Maaf, tiket sudah habis.');
-  }else if(serverAvailable<maksimalTiket){
-    toast('Hanya tersisa '+serverAvailable+' tiket.');
   }else{
-    toast('Maksimal pembelian adalah '+maksimalTiket+' tiket.');
+    toast('Maksimal pembelian adalah '+MAKSIMAL_TIKET+' tiket.');
   }
 });
 
@@ -336,14 +325,33 @@ minusBtn.addEventListener('click',()=>{
   }
 });
 
+function kirimNotifikasiPesanan(){
+  const payload={
+    _subject:'Pesanan Baru - COMMVAGANZA 10.0',
+    halaman:'Pilih Tiket',
+    kategoriTiket:KATEGORI_TIKET,
+    jumlahTiket:String(jumlahTiket),
+    hargaSatuan:formatRupiah(HARGA_SATUAN),
+    totalPembayaran:formatRupiah(HARGA_SATUAN*jumlahTiket),
+    waktuPesanan:new Date().toLocaleString('id-ID')
+  };
+  return fetch(FORMSPREE_ENDPOINT,{
+    method:'POST',
+    headers:{'Content-Type':'application/json','Accept':'application/json'},
+    body:JSON.stringify(payload)
+  }).catch(()=>{});
+}
+
 checkoutButton.addEventListener('click',()=>{
-  if(jumlahTiket<1)return;
-  try{
-    localStorage.setItem('jumlahTiket',String(jumlahTiket));
-    localStorage.setItem('kategoriTiket','Normal Sale 2');
-    localStorage.setItem('hargaTiket',String(serverPrice>0?serverPrice:HARGA_DEFAULT));
-  }catch(e){console.warn('localStorage:',e);}
-  window.location.assign('form.html');
+  if(jumlahTiket<1||mengirim)return;
+  mengirim=true;
+  checkoutButton.disabled=true;
+  if(btnLabel)btnLabel.textContent='Memproses...';
+  simpanPesanan();
+  const batas=new Promise(resolve=>setTimeout(resolve,BATAS_KIRIM));
+  Promise.race([kirimNotifikasiPesanan(),batas]).then(()=>{
+    window.location.assign(HALAMAN_TUJUAN);
+  });
 });
 
 if(backBtn){
@@ -356,28 +364,9 @@ if(backBtn){
 if(couponLink){
   couponLink.addEventListener('click',e=>{
     e.preventDefault();
-    toast('Kode kupon dapat dimasukkan saat checkout.');
+    toast('Kode kupon dapat dimasukkan di halaman pembayaran.');
   });
 }
-
-async function loadAvailability(){
-  setRemaining('Kuota Terbatas');
-  try{
-    if(typeof supabase==='undefined'||typeof APP_CONFIG==='undefined')return;
-    const db=supabase.createClient(APP_CONFIG.SUPABASE_URL,APP_CONFIG.SUPABASE_ANON_KEY);
-    const {data,error}=await db.rpc('get_ticket_availability',{p_event_slug:APP_CONFIG.EVENT_SLUG,p_ticket_code:APP_CONFIG.TICKET_CODE});
-    if(error||!data||!data.length)return;
-    const available=Math.max(0,Number(data[0].available)||0);
-    serverPrice=Number(data[0].price)||HARGA_DEFAULT;
-    serverAvailable=Math.min(maksimalTiket,available);
-    setRemaining(available+' Kursi');
-    if(priceElement)priceElement.textContent=formatRupiah(serverPrice);
-    if(available===0)markSoldOut();
-    if(jumlahTiket>serverAvailable)jumlahTiket=serverAvailable;
-    updateTampilan();
-  }catch(e){console.warn('Availability:',e);}
-}
-loadAvailability();
 
 updateTampilan();
 
