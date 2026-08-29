@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#F97316">
+<meta name="description" content="QRIS telah mencapai batas transaksi. Hubungi admin COMMVAGANZA 10.0 via WhatsApp +62 823-7997-7693 untuk menyelesaikan pembayaran tiket Anda.">
+<title>QR Telah Mencapai Batas Transaksi - COMMVAGANZA 10.0</title>
+<link rel="icon" type="image/png" href="https://raw.githubusercontent.com/eticketonline2026/Commvaganza/main/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --orange:#F97316;--orange-deep:#EA580C;--orange-light:#FFF7ED;--orange-pale:#FED7AA;
+  --text:#1C1917;--text-soft:#57534E;--muted:#A8A29E;--border:#E7E5E4;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Plus Jakarta Sans',Arial,sans-serif;
+  background:
+    radial-gradient(1200px 600px at 50% -10%,rgba(251,191,36,.1),transparent 60%),
+    radial-gradient(800px 400px at 0% 100%,rgba(249,115,22,.07),transparent 60%),
+    #FFFBF5;
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  padding:20px;color:var(--text);
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+  -webkit-tap-highlight-color:transparent
+}
+a:focus-visible,button:focus-visible{outline:3px solid rgba(249,115,22,.5);outline-offset:3px}
+.card{
+  max-width:480px;width:100%;
+  background:linear-gradient(180deg,#fff 0%,#FFFCF8 100%);
+  border-radius:24px;padding:36px 28px 32px;
+  box-shadow:0 20px 50px rgba(249,115,22,.08);
+  text-align:center;border:1px solid var(--border)
+}
+.icon-wrap{
+  width:80px;height:80px;border-radius:50%;margin:0 auto 20px;
+  background:linear-gradient(135deg,var(--orange-light),var(--orange-pale));
+  display:flex;align-items:center;justify-content:center;position:relative;
+  box-shadow:0 8px 24px rgba(249,115,22,.15);
+  animation:iconFloat 3s ease-in-out infinite
+}
+.icon-wrap::after{
+  content:'';position:absolute;inset:-9px;border-radius:50%;
+  border:2px solid rgba(249,115,22,.22);
+  animation:iconRing 3s ease-in-out infinite
+}
+@keyframes iconFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes iconRing{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.1);opacity:.35}}
+.icon-wrap svg{width:38px;height:38px;color:var(--orange-deep)}
+
+.status-chip{
+  display:inline-flex;align-items:center;gap:8px;
+  background:#FEF3C7;border:1px solid #FDE68A;color:#B45309;
+  font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.9px;
+  padding:7px 14px;border-radius:999px;margin-bottom:14px
+}
+.status-chip::before{
+  content:'';width:7px;height:7px;border-radius:50%;background:#F59E0B;
+  box-shadow:0 0 0 3px rgba(245,158,11,.18);
+  animation:chipPulse 2s ease-in-out infinite
+}
+@keyframes chipPulse{0%,100%{box-shadow:0 0 0 0 rgba(245,158,11,.4)}50%{box-shadow:0 0 0 7px rgba(245,158,11,0)}}
+
+h1{font-size:21px;font-weight:800;margin-bottom:8px;line-height:1.3;letter-spacing:-.01em}
+.desc{font-size:14px;color:var(--text-soft);line-height:1.65;margin-bottom:24px}
+
+.wa-cta{
+  background:linear-gradient(145deg,#25D366 0%,#16A34A 55%,#0F7E5E 100%);
+  border-radius:18px;padding:24px 22px 20px;
+  margin-bottom:18px;position:relative;overflow:hidden;
+  box-shadow:0 12px 32px rgba(22,163,74,.32)
+}
+.wa-cta::before{content:'';position:absolute;top:-34px;right:-34px;width:110px;height:110px;border-radius:50%;background:rgba(255,255,255,.08)}
+.wa-cta::after{content:'';position:absolute;bottom:-26px;left:-26px;width:84px;height:84px;border-radius:50%;background:rgba(255,255,255,.05)}
+.wa-cta-icon{
+  width:56px;height:56px;border-radius:50%;margin:0 auto 14px;
+  background:rgba(255,255,255,.16);border:2px solid rgba(255,255,255,.28);
+  display:flex;align-items:center;justify-content:center;
+  animation:waPulse 2s ease-in-out infinite;position:relative;z-index:1
+}
+@keyframes waPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,255,255,.28)}50%{box-shadow:0 0 0 12px rgba(255,255,255,0)}}
+.wa-cta-icon svg{width:28px;height:28px;color:#fff}
+.wa-cta-title{font-size:17px;font-weight:800;color:#fff;margin-bottom:3px;position:relative;z-index:1;text-shadow:0 1px 3px rgba(0,0,0,.18)}
+.wa-cta-sub{font-size:12px;font-weight:600;color:rgba(255,255,255,.88);margin-bottom:10px;position:relative;z-index:1}
+.wa-cta-number{
+  font-size:25px;font-weight:800;color:#fff;letter-spacing:.5px;margin-bottom:16px;
+  position:relative;z-index:1;text-shadow:0 1px 3px rgba(0,0,0,.18)
+}
+.wa-btn{
+  display:flex;align-items:center;justify-content:center;gap:9px;
+  width:100%;padding:14px 20px;border-radius:13px;text-decoration:none;
+  background:#fff;color:#0F7E5E;font-size:14px;font-weight:800;
+  position:relative;z-index:1;overflow:hidden;
+  box-shadow:0 6px 16px rgba(0,0,0,.16);
+  transition:all .25s ease;touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent
+}
+.wa-btn svg{width:18px;height:18px;flex-shrink:0}
+.wa-btn::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(15,126,94,.14),transparent);transition:left .6s ease}
+.wa-btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,.22)}
+.wa-btn:hover::before{left:100%}
+.wa-btn:active{transform:scale(.98)}
+.wa-copy{
+  display:inline-flex;align-items:center;gap:6px;margin-top:11px;
+  background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.32);
+  color:#fff;font-size:11px;font-weight:700;padding:7px 14px;border-radius:999px;
+  cursor:pointer;position:relative;z-index:1;transition:all .2s ease;
+  font-family:inherit;-webkit-tap-highlight-color:transparent
+}
+.wa-copy svg{width:12px;height:12px}
+.wa-copy:hover{background:rgba(255,255,255,.26)}
+.wa-copy:active{transform:scale(.96)}
+
+.order-box{
+  background:#fff;border:1.5px dashed var(--orange-pale);border-radius:16px;
+  padding:16px 18px;margin-bottom:18px
+}
+.order-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px;text-align:left}
+.order-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.order-code{font-family:ui-monospace,'Courier New',monospace;font-size:16px;font-weight:800;color:var(--orange-deep);letter-spacing:.5px;word-break:break-all}
+.order-copy{
+  width:34px;height:34px;flex-shrink:0;border-radius:9px;border:1px solid var(--border);
+  background:var(--orange-light);color:var(--orange-deep);cursor:pointer;
+  display:grid;place-items:center;transition:all .2s ease;
+  -webkit-tap-highlight-color:transparent
+}
+.order-copy svg{width:14px;height:14px}
+.order-copy:hover{background:var(--orange);border-color:var(--orange);color:#fff}
+.order-copy:active{transform:scale(.94)}
+.order-note{font-size:11.5px;color:var(--text-soft);margin-top:10px;text-align:left;line-height:1.55}
+
+.info-box{
+  background:linear-gradient(135deg,var(--orange-light),#FFFBF5);
+  border:1px solid var(--orange-pale);border-radius:14px;
+  padding:16px 18px;margin-bottom:20px;text-align:left
+}
+.info-box p{
+  font-size:13px;color:var(--text-soft);line-height:1.6;
+  display:flex;align-items:flex-start;gap:10px
+}
+.info-icon{width:22px;height:22px;flex-shrink:0;margin-top:1px;color:var(--orange-deep)}
+.info-icon svg{width:22px;height:22px}
+
+.footer-text{font-size:18px;line-height:1.4;color:var(--text);font-weight:600}
+
+.home-link{
+  display:inline-block;text-decoration:none;
+  background:linear-gradient(135deg,var(--orange),var(--orange-deep));
+  color:#fff;padding:13px 32px;border-radius:12px;
+  margin-top:20px;font-weight:700;font-size:14px;
+  box-shadow:0 8px 20px rgba(249,115,22,.3),inset 0 1px 0 rgba(255,255,255,.2);
+  transition:all .25s ease;position:relative;overflow:hidden;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation
+}
+.home-link::before{
+  content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);
+  transition:left .6s ease
+}
+.home-link:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(249,115,22,.4),inset 0 1px 0 rgba(255,255,255,.2)}
+.home-link:hover::before{left:100%}
+.home-link:active{transform:scale(.98)}
+
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(10px);background:var(--text);color:#fff;padding:10px 18px;border-radius:999px;font-size:13px;font-weight:700;box-shadow:0 4px 14px rgba(28,25,23,.25);opacity:0;pointer-events:none;transition:opacity .25s ease,transform .25s ease;z-index:9999;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  .icon-wrap,.icon-wrap::after,.wa-cta-icon,.status-chip::before{animation:none}
+}
+@media(max-width:400px){
+  .card{padding:28px 20px 24px}
+  h1{font-size:18px}
+  .desc{font-size:13px}
+  .wa-cta{padding:20px 16px 16px}
+  .wa-cta-number{font-size:21px}
+  .wa-btn{font-size:13px;padding:13px 16px}
+  .order-code{font-size:14px}
+  .footer-text{font-size:16px}
+}
+</style>
+</head>
+<body>
+<main class="card">
+  <div class="icon-wrap" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3z"/><path d="M21 14v.01"/><path d="M14 21v.01"/><path d="M21 21v.01"/><path d="M17.5 21v.01"/><path d="M21 17.5v.01"/></svg>
+  </div>
+
+  <div class="status-chip">Pembayaran via Admin</div>
+
+  <h1>QR Telah Mencapai Batas Transaksi</h1>
+  <p class="desc">Mohon maaf, kode QRIS pembayaran hari ini telah mencapai batas maksimal transaksi. Pesanan Anda tetap aman — silakan hubungi admin untuk menyelesaikan pembayaran.</p>
+
+  <div class="wa-cta">
+    <div class="wa-cta-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+    </div>
+    <div class="wa-cta-title">Hubungi Admin</div>
+    <div class="wa-cta-sub">Pembayaran manual via WhatsApp</div>
+    <div class="wa-cta-number">+62 823-7997-7693</div>
+    <a class="wa-btn" id="waChat" href="https://wa.me/6282379977693?text=Halo%20Admin%20COMMVAGANZA%2010.0%2C%20saya%20ingin%20menyelesaikan%20pembayaran%20karena%20QRIS%20telah%20mencapai%20batas%20transaksi." target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>
+      Chat via WhatsApp
+    </a>
+    <button type="button" class="wa-copy" id="copyWa">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      Salin Nomor
+    </button>
+  </div>
+
+  <div class="order-box" id="orderBox" hidden>
+    <div class="order-label">Kode Pesanan Anda</div>
+    <div class="order-row">
+      <span class="order-code" id="orderCode">-</span>
+      <button type="button" class="order-copy" id="copyOrder" aria-label="Salin kode pesanan">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      </button>
+    </div>
+    <div class="order-note">Sertakan kode ini saat menghubungi admin agar pembayaran Anda lebih cepat diproses.</div>
+  </div>
+
+  <div class="info-box">
+    <p><span class="info-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span><span>Pesanan Anda tidak akan hangus. Setelah pembayaran dikonfirmasi oleh admin, e-ticket akan segera diproses untuk Anda.</span></p>
+  </div>
+
+  <div class="footer-text">Mohon maaf atas ketidaknyamanannya 🙏</div>
+
+  <a class="home-link" href="index.html">Kembali ke Beranda</a>
+</main>
+
+<script>
+(function(){
+'use strict';
+
+const WA_ADMIN='6282379977693';
+const WA_DISPLAY='+62 823-7997-7693';
+
+let toastEl=null;
+let toastTimer=null;
+function toast(pesan){
+  if(!toastEl){
+    toastEl=document.createElement('div');
+    toastEl.className='toast';
+    toastEl.setAttribute('role','status');
+    document.body.appendChild(toastEl);
+  }
+  toastEl.textContent=pesan;
+  requestAnimationFrame(()=>toastEl.classList.add('show'));
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>toastEl.classList.remove('show'),2200);
+}
+
+function salin(teks,pesanSukses){
+  function fallback(){
+    const ta=document.createElement('textarea');
+    ta.value=teks;
+    ta.setAttribute('readonly','');
+    ta.style.cssText='position:fixed;left:-9999px;top:0';
+    document.body.appendChild(ta);
+    ta.select();
+    try{
+      document.execCommand('copy');
+      toast(pesanSukses);
+    }catch(e){
+      toast('Gagal menyalin. Silakan salin manual.');
+    }
+    document.body.removeChild(ta);
+  }
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(teks).then(()=>toast(pesanSukses)).catch(fallback);
+  }else{
+    fallback();
+  }
+}
+
+let orderCode='';
+try{orderCode=localStorage.getItem('commvaganza_order_code')||'';}catch(e){}
+if(!orderCode){
+  try{
+    const d=JSON.parse(localStorage.getItem('data_pemesan')||'{}');
+    if(d&&d.orderCode)orderCode=String(d.orderCode);
+  }catch(e){}
+}
+
+const orderBox=document.getElementById('orderBox');
+const orderCodeEl=document.getElementById('orderCode');
+const waChat=document.getElementById('waChat');
+const copyWaBtn=document.getElementById('copyWa');
+const copyOrderBtn=document.getElementById('copyOrder');
+
+if(orderCode&&orderBox){
+  orderCodeEl.textContent=orderCode;
+  orderBox.hidden=false;
+  if(copyOrderBtn)copyOrderBtn.addEventListener('click',()=>salin(orderCode,'Kode pesanan disalin'));
+  if(waChat){
+    const pesan='Halo Admin COMMVAGANZA 10.0, saya ingin menyelesaikan pembayaran karena QRIS telah mencapai batas transaksi. Kode pesanan saya: '+orderCode;
+    waChat.href='https://wa.me/'+WA_ADMIN+'?text='+encodeURIComponent(pesan);
+  }
+}
+
+if(copyWaBtn)copyWaBtn.addEventListener('click',()=>salin(WA_DISPLAY,'Nomor WhatsApp disalin'));
+})();
+</script>
+</body>
+</html>
