@@ -460,7 +460,6 @@ const FORMSPREE_ENDPOINT='https://formspree.io/f/mwlkkjkw';
 const HALAMAN_ETICKET='eticket.html';
 const HALAMAN_TIKET='tiket.html';
 const DURASI_TIMER=300;
-const TIMER_KEY_PREFIX='commvaganza_payment_deadline_';
 const DURASI_ANIMASI=3500;
 const BATAS_UNGGAH=30000;
 const MAX_FILE=10*1024*1024;
@@ -545,17 +544,7 @@ jumlahEl.textContent=qty+' Tiket';
 namaEl.textContent=namaPemesan;
 waEl.textContent=waPemesan;
 
-const timerStorageKey=TIMER_KEY_PREFIX+orderCode;
-let deadline=0;
-try{
-  const savedDeadline=Number(localStorage.getItem(timerStorageKey));
-  deadline=Number.isFinite(savedDeadline)&&savedDeadline>0?savedDeadline:0;
-}catch(e){}
-if(!deadline){
-  deadline=Date.now()+DURASI_TIMER*1000;
-  try{localStorage.setItem(timerStorageKey,String(deadline));}catch(e){}
-}
-let duration=Math.max(0,Math.ceil((deadline-Date.now())/1000));
+let duration=DURASI_TIMER;
 let timerInterval=null;
 let isProcessing=false;
 let uploaded=false;
@@ -563,15 +552,15 @@ let objectUrl=null;
 
 function timerRun(){
   if(isProcessing)return;
-  duration=Math.max(0,Math.ceil((deadline-Date.now())/1000));
   timerEl.textContent=pad(Math.floor(duration/60))+':'+pad(duration%60);
   timerEl.classList.toggle('urgent',duration<=30&&duration>0);
   if(duration<=0){
     clearInterval(timerInterval);
-    try{localStorage.removeItem(timerStorageKey);}catch(e){}
     toast('Waktu pembayaran habis. Mengarahkan ke halaman tiket...');
     setTimeout(()=>{location.assign(HALAMAN_TIKET);},1500);
+    return;
   }
+  duration--;
 }
 timerRun();
 timerInterval=setInterval(timerRun,1000);
@@ -616,7 +605,7 @@ function markDoneStep(el){
   }
 }
 
-async function kirimBukti(file){
+function kirimBukti(file){
   const fd=new FormData();
   fd.append('_subject','Bukti Pembayaran - COMMVAGANZA 10.0 ['+orderCode+']');
   if(emailPemesan)fd.append('_replyto',emailPemesan);
@@ -629,19 +618,23 @@ async function kirimBukti(file){
   fd.append('Total Bayar',format(total));
   fd.append('Waktu Pembayaran',new Date().toLocaleString('id-ID'));
   fd.append('bukti_pembayaran',file,file.name);
-  const controller=new AbortController();
-  const timeoutId=setTimeout(()=>controller.abort(),BATAS_UNGGAH);
-  try{
-    const response=await fetch(FORMSPREE_ENDPOINT,{method:'POST',headers:{'Accept':'application/json'},body:fd,signal:controller.signal});
-    if(!response.ok)throw new Error('HTTP '+response.status);
-  }finally{clearTimeout(timeoutId);}
+  const kirim=fetch(FORMSPREE_ENDPOINT,{
+    method:'POST',
+    headers:{'Accept':'application/json'},
+    body:fd
+  }).then(function(r){
+    if(!r.ok)throw new Error('HTTP '+r.status);
+  });
+  const batas=new Promise(function(_,reject){
+    setTimeout(function(){reject(new Error('Batas waktu terlampaui.'));},BATAS_UNGGAH);
+  });
+  return Promise.race([kirim,batas]);
 }
 
 btn.addEventListener('click',function(){
   if(btn.disabled||isProcessing)return;
   const file=fileInput.files&&fileInput.files[0];
   if(!file)return;
-  if(Date.now()>=deadline){timerRun();return;}
 
   isProcessing=true;
   clearInterval(timerInterval);
@@ -651,6 +644,7 @@ btn.addEventListener('click',function(){
 
   const start=Date.now();
   const unggah=kirimBukti(file);
+  unggah.catch(function(){});
 
   function frame(){
     const p=Math.min((Date.now()-start)/DURASI_ANIMASI,1);
@@ -670,11 +664,8 @@ btn.addEventListener('click',function(){
     else finish();
   }
 
-  async function finish(){
-    subtitleEl.textContent='Memastikan bukti pembayaran tersimpan...';
-    timeEl.textContent='Mohon tunggu';
-    try{
-      await unggah;
+  function finish(){
+    unggah.then(function(){
       stepEls.forEach(function(el){
         el.classList.remove('active');
         el.classList.add('done');
@@ -685,21 +676,20 @@ btn.addEventListener('click',function(){
       numEl.textContent='100';
       barEl.style.width='100%';
       subtitleEl.textContent='Bukti pembayaran terkirim. Menunggu verifikasi admin.';
-      try{localStorage.setItem('commvaganza_payment_proof_submitted','1');localStorage.removeItem(timerStorageKey);}catch(e){}
+      try{localStorage.setItem('commvaganza_payment_proof_submitted','1');}catch(e){}
       setTimeout(function(){location.assign(HALAMAN_ETICKET);},800);
-    }catch(e){
+    }).catch(function(e){
       console.error('Formspree:',e);
       loadingEl.classList.remove('active');
       document.body.classList.remove('no-scroll');
       isProcessing=false;
       syncButton();
-      toast(e&&e.name==='AbortError'?'Upload terlalu lama. Periksa koneksi lalu coba lagi.':'Bukti pembayaran gagal terkirim. Periksa koneksi internet lalu coba lagi.');
-    }
+      toast('Bukti pembayaran gagal terkirim. Periksa koneksi internet lalu coba lagi.');
+    });
   }
 
   requestAnimationFrame(frame);
 });
-window.addEventListener('pagehide',()=>{if(objectUrl)URL.revokeObjectURL(objectUrl);});
 })();
 </script>
 
