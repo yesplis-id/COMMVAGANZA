@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -21,6 +20,7 @@
 <link rel="preconnect" href="https://formspree.io" crossorigin>
 <link rel="dns-prefetch" href="https://formspree.io">
 <link rel="prefetch" href="qris.html">
+<link rel="prefetch" href="tiket.html">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="preload" as="image" href="https://raw.githubusercontent.com/eticketonline2026/Commvaganza/main/banner.png" fetchpriority="high">
 <title>Form Pemesanan Tiket - COMMVAGANZA 10.0 | Bandar Lampung 2026</title>
@@ -118,7 +118,6 @@ textarea:focus-visible {
 .progress {
     position: relative;
     padding: 14px 28px 18px;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
     background: linear-gradient(to bottom, var(--dark), var(--dark-deep));
     overflow: hidden;
 }
@@ -324,9 +323,10 @@ textarea:focus-visible {
 .event-info svg { width: 13px; height: 13px; flex-shrink: 0; }
 
 .summary-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; color: var(--text-soft); }
-.summary-row strong { color: var(--text); font-weight: 600; }
+.summary-row strong { color: var(--text); font-weight: 600; overflow-wrap: anywhere; text-align: right; }
 .summary-row.total { font-size: 18px; font-weight: 800; color: var(--text); border-bottom: none; margin-top: 8px; padding-top: 12px; border-top: 2px solid var(--border); }
 .summary-row.total span { color: var(--orange-deep); }
+#jenisTiket { max-width: 66%; }
 
 .form-group { margin-bottom: 16px; }
 .form-group:last-child { margin-bottom: 0; }
@@ -520,6 +520,7 @@ input.error, select.error, textarea.error { border-color: var(--red); background
 .btn-lanjut:disabled { opacity: 0.7; cursor: not-allowed; transform: none; box-shadow: none; background: var(--muted); }
 .btn-lanjut:disabled::before { display: none; }
 .btn-lanjut svg { width: 16px; height: 16px; flex-shrink: 0; }
+.btn-lanjut .spinner { flex: 0 0 auto; }
 
 .site-footer {
     text-align: center;
@@ -576,7 +577,7 @@ input.error, select.error, textarea.error { border-color: var(--red); background
     opacity: 0.45;
 }
 
-.loading-overlay { visibility: hidden; opacity: 0; position: fixed; inset: 0; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px); z-index: 99999; display: flex; justify-content: center; align-items: center; flex-direction: column; transition: opacity 0.3s ease; }
+.loading-overlay { visibility: hidden; opacity: 0; position: fixed; inset: 0; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px); z-index: 99999; display: flex; justify-content: center; align-items: center; flex-direction: column; transition: opacity 0.3s ease; padding: 24px; text-align: center; }
 .loading-overlay.active { visibility: visible; opacity: 1; }
 .spinner-box { width: 70px; height: 70px; display: flex; justify-content: center; align-items: center; border-radius: 50%; background: #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.1); margin-bottom: 20px; }
 .spinner { width: 35px; height: 35px; border: 4px solid rgba(249,115,22,.15); border-top-color: var(--orange); border-radius: 50%; animation: spin 1s linear infinite; }
@@ -598,6 +599,16 @@ input.error, select.error, textarea.error { border-color: var(--red); background
     .progress { padding: 14px 16px 16px; }
 }
 
+@media (max-width: 380px) {
+    .topbar { padding: 14px 16px; }
+    .content { padding: 20px 16px; }
+    .banner-wrap { padding: 14px 16px 0; }
+    .card { padding: 16px; border-radius: 14px; }
+    .event-info { gap: 8px; }
+    .flying-box { gap: 8px; }
+    .btn-lanjut { padding: 13px 16px; font-size: 13px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -609,21 +620,6 @@ input.error, select.error, textarea.error { border-color: var(--red); background
     }
     .step.active .step-dot,
     .step.active .step-dot::after { animation: none; }
-}
-
-.btn-lanjut:focus-visible { outline: 3px solid rgba(249,115,22,.35); outline-offset: 3px; }
-.btn-lanjut .spinner { flex: 0 0 auto; }
-.summary-row strong { overflow-wrap: anywhere; text-align: right; }
-#jenisTiket { max-width: 66%; }
-.loading-overlay { padding: 24px; text-align: center; }
-@media (max-width: 380px) {
-    .topbar { padding: 14px 16px; }
-    .content { padding: 20px 16px; }
-    .banner-wrap { padding: 14px 16px 0; }
-    .card { padding: 16px; border-radius: 14px; }
-    .event-info { gap: 8px; }
-    .flying-box { gap: 8px; }
-    .btn-lanjut { padding: 13px 16px; font-size: 13px; }
 }
 </style>
 <noscript><style>.loading-overlay{display:none!important}</style></noscript>
@@ -826,10 +822,9 @@ const DRAFT_KEYS=['draft_nama','draft_identitas','draft_nomorId','draft_email','
 const emailRe=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 const phoneRe=/^(\+62|62|0)8\d{7,12}$/;
 
-const jumlahTiket=Number(localStorage.getItem('jumlahTiket'))||0;
-const kategoriTiket=localStorage.getItem('kategoriTiket')||'-';
-const hargaTiket=Number(localStorage.getItem('hargaTiket'))||0;
-const total=jumlahTiket*hargaTiket;
+function lsGet(key){
+  try{return localStorage.getItem(key);}catch(e){return null;}
+}
 
 function safeJSON(value,fallback){
   try{
@@ -849,6 +844,11 @@ function escapeHTML(str){
 function formatRupiah(n){
   return 'Rp'+Math.round(Number(n)||0).toLocaleString('id-ID');
 }
+
+const jumlahTiket=Number(lsGet('jumlahTiket'))||0;
+const kategoriTiket=lsGet('kategoriTiket')||'-';
+const hargaTiket=Number(lsGet('hargaTiket'))||0;
+const total=jumlahTiket*hargaTiket;
 
 let toastEl=null;
 let toastTimer=null;
@@ -877,9 +877,9 @@ if(jumlahTiket>0&&kategoriTiket!=='-'){
 }
 
 document.getElementById('detailTiket').innerHTML=htmlDetail;
-document.getElementById('jenisTiket').innerText=jenisTiketText;
-document.getElementById('jumlahTiket').innerText=jumlahTiket+' Tiket';
-document.getElementById('totalBayar').innerText=formatRupiah(total);
+document.getElementById('jenisTiket').textContent=jenisTiketText;
+document.getElementById('jumlahTiket').textContent=jumlahTiket+' Tiket';
+document.getElementById('totalBayar').textContent=formatRupiah(total);
 
 const namaEl=document.getElementById('nama');
 const identitasEl=document.getElementById('identitas');
@@ -892,7 +892,7 @@ const setuju2El=document.getElementById('setuju2');
 const loadingEl=document.getElementById('loading');
 const lanjutBtn=document.getElementById('lanjut');
 const holderContainer=document.getElementById('holderContainer');
-const lanjutLabel=lanjutBtn.innerHTML;
+const BTN_DEFAULT_HTML=lanjutBtn.innerHTML;
 
 function saveDraft(){
   try{
@@ -906,12 +906,12 @@ function saveDraft(){
 }
 
 function restoreDraft(){
-  namaEl.value=localStorage.getItem('draft_nama')||'';
-  identitasEl.value=localStorage.getItem('draft_identitas')||'';
-  nomorIdEl.value=localStorage.getItem('draft_nomorId')||'';
-  emailEl.value=localStorage.getItem('draft_email')||'';
-  waEl.value=localStorage.getItem('draft_wa')||'';
-  alamatEl.value=localStorage.getItem('draft_alamat')||'';
+  namaEl.value=lsGet('draft_nama')||'';
+  identitasEl.value=lsGet('draft_identitas')||'';
+  nomorIdEl.value=lsGet('draft_nomorId')||'';
+  emailEl.value=lsGet('draft_email')||'';
+  waEl.value=lsGet('draft_wa')||'';
+  alamatEl.value=lsGet('draft_alamat')||'';
 }
 restoreDraft();
 
@@ -994,7 +994,7 @@ function generateHolders(count){
     holderContainer.appendChild(card);
   }
 
-  const draftHoldersRaw=safeJSON(localStorage.getItem('draft_holders'),[]);
+  const draftHoldersRaw=safeJSON(lsGet('draft_holders'),[]);
   const draftHolders=Array.isArray(draftHoldersRaw)?draftHoldersRaw:[];
 
   draftHolders.forEach(d=>{
@@ -1201,6 +1201,16 @@ lanjutBtn.addEventListener('click',async function(){
   }
 
   window.location.assign(HALAMAN_TUJUAN);
+});
+
+window.addEventListener('pageshow',e=>{
+  if(e.persisted){
+    isSubmitting=false;
+    lanjutBtn.disabled=false;
+    lanjutBtn.removeAttribute('aria-busy');
+    lanjutBtn.innerHTML=BTN_DEFAULT_HTML;
+    loadingEl.classList.remove('active');
+  }
 });
 })();
 </script>
